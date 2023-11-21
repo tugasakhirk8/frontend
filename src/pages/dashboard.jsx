@@ -10,9 +10,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const {isError} = useSelector((state => state.auth));
   
-    useEffect(() => {
-        document.title = 'Dashboard'
-    }, []);
 
     useEffect(() => {
       dispatch(getMe());
