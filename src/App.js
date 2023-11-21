@@ -1,56 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
+import Login from "./components/login";
+import Users from "./pages/users";
+import Absent from "./pages/absent";
+import AddUser from "./pages/adduser";
+import EditUser from "./pages/edituser";
+import AddAbsent from "./pages/addabsent";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/absent" element={<Absent />} />
+          <Route path="/users/add" element={<AddUser />} />
+          <Route path="/absent/add" element={<AddAbsent />} />
+          <Route path="/users/edit/:id" element={<EditUser />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
