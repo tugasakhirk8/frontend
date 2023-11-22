@@ -9,18 +9,39 @@ const initialState = {
     message: ""
 }
 
-export const LoginUser = createAsyncThunk("user/LoginUser", async(user, thunkAPI) => {
+export const LoginUser = createAsyncThunk("user/LoginUser", async (user, thunkAPI) => {
     try {
-        const response = await axios.post('https://localhost:5000/login',{
-            name: user.name,
-            password: user.password
-        });
-        return response.data;
-    } catch (error) {
-        if(error.response){
-            const message = error.response.data.msg;
-            return thunkAPI.rejectWithValue(message);
+        console.log(user);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': 'connect.sid=s%3AFI82Utv2Qcx71g-7V1UTyNdzluwSm53j.aXRIcDWxC7K%2B6j%2BZ%2FjlaB2bNRVgAsxSM4%2BwDX%2BB7Iek',
+            },
+            body: JSON.stringify({
+                name: user.name,
+                password: user.password,
+            }),
+            redirect: 'follow',
+        };
+
+        const response = await fetch("http://localhost:5000/login", requestOptions);
+
+        if (!response.ok) {
+            // Handle non-successful responses
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
         }
+
+        const result = await response.json();
+        console.log(result);
+
+        return result;
+    } catch (error) {
+        // Handle synchronous errors
+        console.error('error', error);
+        return thunkAPI.rejectWithValue(error.message || 'An error occurred');
     }
 });
 
