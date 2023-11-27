@@ -4,6 +4,7 @@ import Absentlist from '../components/absentlist';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/AuthSlice";
+import FormAddAbsent from '../components/formaddabsen';
 
 const Absent = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Absent = () => {
 
   return (
     <Layout>
-        <Absentlist />
+        <FormAddAbsent />
     </Layout>
   );
 };

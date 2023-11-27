@@ -4,6 +4,7 @@ import Welcome from "../components/welcome";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/AuthSlice";
+import Absentlist from "../components/absentlist";
 
 const Dashboard = () => {
   const user = localStorage.getItem("user");
@@ -25,6 +26,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <Welcome />
+      <Absentlist />
     </Layout>
   );
 };

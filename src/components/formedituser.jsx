@@ -1,6 +1,16 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 
 const FormEditUser = () => {
+    const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+  
+
   return (
     <div>
         <h1 className='title'>Users</h1>

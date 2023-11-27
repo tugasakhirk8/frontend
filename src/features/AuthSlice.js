@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const user = JSON.parse(localStorage.getItem("user"));
+
 const initialState = {
     user: null,
     isError: false,
@@ -15,7 +17,7 @@ export const LoginUser = createAsyncThunk("user/LoginUser", async (user, thunkAP
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie': 'connect.sid=s%3AFI82Utv2Qcx71g-7V1UTyNdzluwSm53j.aXRIcDWxC7K%2B6j%2BZ%2FjlaB2bNRVgAsxSM4%2BwDX%2BB7Iek',
+                // 'Cookie': 'connect.sid=s%3AFI82Utv2Qcx71g-7V1UTyNdzluwSm53j.aXRIcDWxC7K%2B6j%2BZ%2FjlaB2bNRVgAsxSM4%2BwDX%2BB7Iek',
             },
             body: JSON.stringify({
                 name: user.name,
@@ -46,8 +48,19 @@ export const LoginUser = createAsyncThunk("user/LoginUser", async (user, thunkAP
 
 export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
     try {
-        const response = await axios.get('https://localhost:5000/me');
-        return response.data;
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + user.uuid);
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:5000/me", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
     } catch (error) {
         if (error.response) {
             const message = error.response.data.msg;
@@ -58,28 +71,29 @@ export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
 
 export const LogOut = createAsyncThunk("user/LogOut", async (_, thunkAPI) => {
     try {
-        const response = await axios.delete('http://localhost:5000/logout', {
-            headers: {
-                'Content-Type': 'application/json',
-                'Cookie': 'connect.sid=s%3AdGw5f9AcE212q7pjXet2uB2bg7CSs2pG.EY3rOOAXoGZLmtvksHJqpszupfNc22ShCj%2FkBA%2FphLU',
-            },
-            data: {
-                name: "Asep Karbu",
-                password: "123456",
-            },
-        });
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + user.uuid);
 
-        console.log(JSON.stringify(response.data));
-        // You can handle the response or return data to the reducer
-        return response.data;
+var requestOptions = {
+  method: 'DELETE',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:5000/me", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
     } catch (error) {
-        console.error(error);
-        // Handle the error or reject the promise
-        throw error;
+        if (error.response) {
+            const message = error.response.data.msg;
+            return thunkAPI.rejectWithValue(message);
+        }
     }
+    localStorage.removeItem('user');
 });
     // Remove an item from local storage
-    localStorage.removeItem('user');
+    
 
 
 export const authSlice = createSlice({
